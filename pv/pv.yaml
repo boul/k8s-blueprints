@@ -1,0 +1,83 @@
+apiVersion: "v1"
+kind: "PersistentVolume"
+metadata:
+  name: "pv001"
+spec:
+  capacity:
+    storage: "10Gi"
+  accessModes:
+    - "ReadWriteMany"
+  nfs:
+    server: "192.168.2.121"
+    path: "/gv0/pv001"
+    readOnly: false
+  persistentVolumeReclaimPolicy: "Recycle"
+
+---
+
+apiVersion: "v1"
+kind: "PersistentVolume"
+metadata:
+  name: "pv002"
+spec:
+  capacity:
+    storage: "10Gi"
+  accessModes:
+    - "ReadWriteMany"
+  nfs:
+    server: "192.168.2.121"
+    path: "/gv0/pv002"
+    readOnly: false
+  persistentVolumeReclaimPolicy: "Recycle"
+
+---
+
+apiVersion: "v1"
+kind: "PersistentVolume"
+metadata:
+  name: "pv003"
+spec:
+  capacity:
+    storage: "10Gi"
+  accessModes:
+    - "ReadWriteMany"
+  nfs:
+    server: "192.168.2.121"
+    path: "/gv0/pv003"
+    readOnly: false
+  persistentVolumeReclaimPolicy: "Recycle"
+
+---
+
+apiVersion: "v1"
+kind: "PersistentVolume"
+metadata:
+  name: "pv004"
+spec:
+  capacity:
+    storage: "10Gi"
+  accessModes:
+    - "ReadWriteMany"
+  nfs:
+    server: "192.168.2.121"
+    path: "/gv0/pv004"
+    readOnly: false
+  persistentVolumeReclaimPolicy: "Recycle"
+
+
+---
+
+apiVersion: "v1"
+kind: "PersistentVolume"
+metadata:
+  name: "pv005"
+spec:
+  capacity:
+    storage: "10Gi"
+  accessModes:
+    - "ReadWriteMany"
+  nfs:
+    server: "192.168.2.121"
+    path: "/gv0/pv005"
+    readOnly: false
+  persistentVolumeReclaimPolicy: "Recycle"

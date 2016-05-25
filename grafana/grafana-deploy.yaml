@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: grafana
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: grafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana:3.0.3
+        env:
+          - name: GF_SERVER_DOMAIN
+            value: grafana.boul.nl
+            # This variable is required to setup templates in Grafana.
+            # - name: GF_DATABASE_TYPE
+            #   value: mysql
+            # - name: GF_DATABASE_HOST
+            #   value: mariadb:3306
+            # - name: GF_DATABASE_USER
+            #   value: grafana
+            # - name: GF_DATABASE_PASSWORD
+            #   value: grafana
+
+        ports:
+        - name: web-interface
+          containerPort: 3000
+        volumeMounts:
+        - mountPath: "/var/lib/grafana"
+          name: grafana1-mount
+        livenessProbe:
+        # an http probe
+          httpGet:
+            path: /
+            port: 3000
+          # length of time to wait for a pod to initialize
+          # after pod startup, before applying health checking
+          initialDelaySeconds: 30
+          timeoutSeconds: 1 
+      volumes:
+        - name: grafana1-mount
+          persistentVolumeClaim:
+            claimName: grafana1-claim

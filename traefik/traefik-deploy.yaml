@@ -1,0 +1,26 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: traefik
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: traefik
+    spec:
+      containers:
+      - image: containous/traefik
+        name: traefik-ingress-lb
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          # hostPort: 80
+        - containerPort: 443
+          # hostPort: 443
+        - containerPort: 8080
+        args:
+        - --web
+        - --kubernetes
+        - --logLevel=WARN
+

@@ -1,0 +1,44 @@
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: influxdb
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      containers:
+      - name: influxdb
+        image: influxdb:0.13.0
+        ports:
+        - name: admin-interface
+          containerPort: 8083
+        - name: http-api
+          containerPort: 8086
+        - name: graphite
+          containerPort: 2003
+        volumeMounts:
+        - mountPath: "/var/lib/influxdb"
+          name: influxdb1-mount
+        env:
+          - name: INFLUXDB_GRAPHITE_ENABLED
+            value: "true"
+          - name: ADMIN_BIND_ADDRESS
+            value: "0.0.0.0:8083"
+        livenessProbe:
+          # # an http probe
+          # httpGet:
+          #   path: /
+          #   port: 8086
+          # # length of time to wait for a pod to initialize
+          # # after pod startup, before applying health checking
+          # initialDelaySeconds: 30
+          # timeoutSeconds: 1 
+      volumes:
+        - name: influxdb1-mount
+          persistentVolumeClaim:
+            claimName: influxdb1-claim
+        

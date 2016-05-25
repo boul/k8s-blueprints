@@ -1,0 +1,37 @@
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: mariadb
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: mariadb
+    spec:
+      containers:
+      - name: mariadb
+        image: mariadb:10.1.14
+        ports:
+        - name: mysql-port
+          containerPort: 3306
+        volumeMounts:
+        - mountPath: "/var/lib/mysql"
+          name: mariadb1-mount
+        env:
+          - name: MYSQL_ROOT_PASSWORD
+            value: "my-secret-pw"
+          - name: MYSQL_DATABASE
+            value: "grafana"
+          - name: MYSQL_USER
+            value: "grafana"
+          - name: MYSQL_PASSWORD
+            value: "grafana"
+
+          # timeoutSeconds: 1 
+      volumes:
+        - name: mariadb1-mount
+          persistentVolumeClaim:
+            claimName: mariadb1-claim
+        
