@@ -15,6 +15,18 @@ spec:
         env:
           - name: GF_SERVER_DOMAIN
             value: grafana.boul.nl
+          - name: GF_SECURITY_ADMIN_USER
+            valueFrom:
+              secretKeyRef:
+                name: boul-default
+                key: username
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: boul-default
+                key: password
+          - name: GF_USERS_ALLOW_SIGN_UP
+            value: "false"
             # This variable is required to setup templates in Grafana.
             # - name: GF_DATABASE_TYPE
             #   value: mysql

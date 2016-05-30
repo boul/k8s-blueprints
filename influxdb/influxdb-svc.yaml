@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: influxdb
 spec:
-  type: ClusterIP
+  type: NodePort
   ports:
   - name: admin-interface
     port: 8083
@@ -13,8 +13,21 @@ spec:
     port: 8086
     # targetPort: 80
     protocol: TCP
+  selector:
+    app: influxdb
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: influxdb-graphite
+spec:
+  type: NodePort
+  ports:
   - name: graphite
     port: 2003
+    nodePort: 32003
     # targetPort: 80
     protocol: TCP
   selector:
