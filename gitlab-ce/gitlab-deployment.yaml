@@ -1,0 +1,58 @@
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gitlab-ce
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: gitlab-ce
+    spec:
+      containers:
+      - name: gitlab-ce
+        image: gitlab/gitlab-ce:8.10.5-ce.0
+        ports:
+        - name: gitlab-http
+          containerPort: 80
+        - name: gitlab-https
+          containerPort: 443
+        - name: gitlab-ssh
+          containerPort: 22
+        volumeMounts:
+        - mountPath: "/var/opt/gitlab"
+          name: gitlab1-mount
+        # - mountPath: "/var/log/gitlab"
+        #   name: gitlab2-mount
+        # - mountPath: "/etc/gitlab"
+        #   name: gitlab3-mount
+        env:
+          - name: GITLAB_OMNIBUS_CONFIG
+            value:  |
+                    gitlab_rails['smtp_enable'] = true
+                    gitlab_rails['smtp_address'] = "smtp-relay.gmail.com"
+                    gitlab_rails['smtp_port'] = 587
+                    gitlab_rails['smtp_domain'] = "boul.nl"
+                    gitlab_rails['smtp_enable_starttls_auto'] = true
+                    gitlab_rails['smtp_tls'] = false
+                    gitlab_rails['smtp_authentication'] = false
+                    gitlab_rails['smtp_openssl_verify_mode'] = "none"
+                    gitlab_rails['gitlab_email_from'] = "gitlab@boul.nl"
+                    external_url "http://gitlab.boul.nl"
+          - name: GITLAB_HOST
+            value: "http://gitlab.boul.nl"
+          # - name: GITLAB_EMAIL_FROM
+          #   value: "gitlab@boul.nl"
+          # - name: GITLAB_EMAIL_DISPLAY_NAME
+          #   value: "BouL Gitlab"
+         
+          # timeoutSeconds: 1 
+      volumes:
+        - name: gitlab1-mount
+          persistentVolumeClaim:
+            claimName: gitlab1-claim
+        # - name: gitlab2-mount
+        #   persistentVolumeClaim:
+        #     claimName: gitlab2-claim
+        

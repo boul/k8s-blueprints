@@ -4,6 +4,7 @@ metadata:
   name: grafana
 spec:
   replicas: 1
+  
   template:
     metadata:
       labels:
@@ -11,7 +12,7 @@ spec:
     spec:
       containers:
       - name: grafana
-        image: grafana/grafana:3.0.3
+        image: grafana/grafana:3.1.1
         env:
           - name: GF_SERVER_DOMAIN
             value: grafana.boul.nl

@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: gitlab-ingress
+spec:
+  rules:
+  - host: gitlab.boul.nl
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: gitlab-ce
+          servicePort: 80
+  # - host: bar.localhost
+  #   http:
+  #     paths:
+  #     - backend:
+  #         serviceName: service2
+  #         servicePort: 80
+  #     - backend:
+  #         serviceName: service3
+  #         servicePort: 80
