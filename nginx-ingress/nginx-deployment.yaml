@@ -4,14 +4,14 @@ metadata:
   name: nginx
   namespace: nginx-ingress
 spec:
-  replicas: 1
+  replicas: 2
   template:
     metadata:
       labels:
         app: nginx
     spec:
       containers:
-      - image: gcr.io/google_containers/nginx-ingress-controller:0.8.3
+      - image: gcr.io/google_containers/nginx-ingress-controller:0.8.2
         name: nginx
         imagePullPolicy: Always
         env:
