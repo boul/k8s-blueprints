@@ -39,7 +39,15 @@ spec:
                     gitlab_rails['smtp_authentication'] = false
                     gitlab_rails['smtp_openssl_verify_mode'] = "none"
                     gitlab_rails['gitlab_email_from'] = "gitlab@boul.nl"
-                    external_url "http://gitlab.boul.nl"
+                    external_url "https://gitlab.boul.nl"
+                    nginx['listen_port'] = 80
+                    nginx['listen_https'] = false
+                    nginx['proxy_set_headers'] = {"X-Forwarded-Proto" => "https","X-Forwarded-Ssl" => "on"}
+                    registry_external_url 'https://registry.boul.nl'
+                    registry_nginx['listen_port'] = 80
+                    registry_nginx['listen_https'] = false
+                    registry_nginx['proxy_set_headers'] = {  "X-Forwarded-Proto" => "https", "X-Forwarded-Ssl" => "on" }
+
           - name: GITLAB_HOST
             value: "http://gitlab.boul.nl"
           # - name: GITLAB_EMAIL_FROM
