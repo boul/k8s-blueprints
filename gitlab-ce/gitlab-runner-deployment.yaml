@@ -1,0 +1,46 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: gitlab-runner
+spec:
+  replicas: 1
+  
+  template:
+    metadata:
+      labels:
+        app: gitlab-runner
+    spec:
+      containers:
+      - image: gitlab/gitlab-runner:latest
+        env:
+          - name: CI_SERVER_URL
+            value: "https://gitlab.boul.nl/ci"
+          - name: RUNNER_NAME
+            value: "boul-shared-docker-runner"
+          - name: REGISTRATION_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: gitlab-ci-token
+                key: token
+          - name: REGISTER_NON_INTERACTIVE
+            value: "true"
+
+        command:
+        - /bin/bash
+        - -c
+        - '/usr/bin/dumb-init gitlab-ci-multi-runner register -executor=docker --docker-image=python --docker-volumes=/var/run/docker.sock:/var/run/docker.sock --cache-dir=/cache; /usr/bin/dumb-init gitlab-ci-multi-runner run'
+        imagePullPolicy: Always
+        name: gitlab-runner
+        volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: dockersock
+        - mountPath: /cache
+          name: cache
+      restartPolicy: Always
+      volumes:
+      - hostPath:
+          path: /var/run/docker.sock
+        name: dockersock
+      - hostPath:
+          path: /cache
+        name: cache
