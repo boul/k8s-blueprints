@@ -1,0 +1,34 @@
+
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: styra
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: styra
+    spec:
+      containers:
+      - name: mariadb
+        image: registry.boul.nl/boul/styra:latest
+        ports:
+        - name: http-port
+          containerPort: 80
+        # - name: http-api1
+        #   containerPort: 8080
+        # - name: http-api2
+        #   containerPort: 8081  
+        volumeMounts:
+        - mountPath: "/etc/fetchdb"
+          name: styra-config
+      imagePullSecrets:
+        - name: boul-gitlab
+      volumes:
+        - name: styra-config
+          configMap:
+            name: styra-config
+            
+
+        

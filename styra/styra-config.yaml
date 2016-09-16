@@ -1,0 +1,161 @@
+apiVersion: v1
+data:
+  credentials: |
+    fetchdb/admin:5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8
+    aws_usertoken:aaaaaaaaaaaaaaaaaaaaaaaa
+    nova/admin:password
+    neutron/admin:password
+    cloudfoundry/admin@domain.com:password
+    metrics/admin:password
+    github/user:token
+    jenkins/admin:password
+    jira/integration:password
+
+  plugins.yml: |
+    rest:
+            - name: ohai
+              collection: ohai
+              partition: localhost
+              addr: '0.0.0.0'
+              port: '8080'
+            - name: cloudstack
+              collection: cloudstack
+              partition: localhost
+              addr: '0.0.0.0'
+              port: '8080'
+            - name: kubernetes
+              collection: kubernetes
+              partition: localhost
+              addr: '0.0.0.0'
+              port: '8080'
+
+    process:
+            - name: process
+              collection: process
+              partition: localhost
+
+    codedeploy:
+            - name: codedeploy_west
+              collection: codedeploy_west
+              partition: localhost
+              region: us-west-2
+              polling_interv: 60
+              creds: "aws_usertoken"
+            - name: codedeploy_east
+              collection: codedeploy_east
+              partition: localhost
+              region: us-east-1
+              polling_interv: 60
+              creds: "aws_usertoken"
+
+    ec2:
+            - name: ec2
+              collection: ec2
+              partition: localhost
+              region: us-west-2
+              polling_interv: 60
+              creds: "aws_usertoken"
+
+    elb:
+            - name: elb_west
+              collection: elb_west
+              partition: localhost
+              region: us-west-2
+              polling_interv: 60
+              creds: "aws_usertoken"
+            - name: elb_east
+              collection: elb_east
+              partition: localhost
+              region: us-east-1
+              polling_interv: 60
+              creds: "aws_usertoken"
+
+    s3:
+            - name: s3
+              collection: s3
+              partition: localhost
+              region: us-west-2
+              polling_interv: 40
+              creds: "aws_usertoken"
+
+    fork:
+            - name: nova
+              collection: nova
+              partition: localhost
+              command: ./datasources/python/openstack/nova.py
+              arg: "--tenant admin --auth_url http://openstack.domain.com:5000/v2.0"
+              creds: "admin"
+              timeout: 40
+              polling_interv: 60
+            - name: neutron
+              collection: neutron
+              partition: localhost
+              command: ./datasources/python/openstack/neutron.py
+              arg: "--tenant admin --auth_url http://openstack.domain.com:5000/v2.0"
+              creds: "admin"
+              timeout: 40
+              polling_interv: 60
+            - name: cloudfoundry
+              collection: cloudfoundry
+              partition: localhost
+              command: ./datasources/python/cloudfoundry/cloudfoundry.py
+              arg: "--api_endpoint https://api.run.pivotal.io/"
+              creds: "admin@domain.com"
+              timeout: 40
+              polling_interv: 60
+            - name: packages
+              collection: packages
+              partition: localhost
+              command: ./datasources/python/other/packages.py
+              arg: ""
+              timeout: 40
+              polling_interv: 60
+            - name: metrics
+              collection: metrics
+              partition: localhost
+              command: ./datasources/python/other/http_datasource.py
+              arg: "-url http://localhost:8080/v1/system/status --auth basic --insecure true"
+              creds: "metrics/admin"
+              timeout: 40
+            - name: github
+              collection: github
+              partition: localhost
+              command: ./datasources/python/other/github.py
+              arg: "-d 2 -o orgname --extension yml"
+              creds: "user"
+              timeout: 600
+              polling_interv: 3600
+            - name: jenkins
+              collection: jenkins
+              partition: localhost
+              command: ./datasources/python/other/jenkins.py
+              arg: "--url http://jenkins.local"
+              creds: "user"
+              timeout: 60
+              polling_interv: 900
+            - name: docker_local
+              collection: docker_local
+              partition: localhost
+              command: ./datasources/styrex-docker
+              arg: "push"
+              timeout: 60
+              polling_interv: 60
+            - name: security_adv
+              collection: security_adv
+              partition: localhost
+              command: ./datasources/styrex-secadv
+              arg: "push --usn"
+              timeout: 60
+              polling_interv: 60
+            - name: jira_issues
+              collection: jira_issues
+              partition: localhost
+              command: ./datasources/python/other/http_datasource.py
+              arg: -url https://styrainc.atlassian.net/rest/api/latest/search --auth basic --insecure true --method POST --data '{"startAt":0,"maxResults":10000}'
+              creds: jira/integration
+              timeout: 180
+              polling_interv: 60
+kind: ConfigMap
+metadata:
+  name: styra-config
+  namespace: default

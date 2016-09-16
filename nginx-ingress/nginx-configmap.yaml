@@ -8,5 +8,5 @@ data:
   server-name-hash-bucket-size: "256"
 kind: ConfigMap
 metadata:
-  namespace: nginx-ingress
+  namespace: kube-system
   name: nginx

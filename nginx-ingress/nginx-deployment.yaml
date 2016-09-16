@@ -2,7 +2,7 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: nginx
-  namespace: nginx-ingress
+  namespace: kube-system
 spec:
   replicas: 2
   template:
@@ -35,5 +35,5 @@ spec:
         - containerPort: 443
         args:
         - /nginx-ingress-controller
-        - --default-backend-service=nginx-ingress/default-http-backend
+        - --default-backend-service=kube-system/default-http-backend
         - --nginx-configmap=nginx-ingress/nginx

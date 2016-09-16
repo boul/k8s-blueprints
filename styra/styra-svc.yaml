@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: styra
+spec:
+  type: NodePort
+  ports:    
+  - name: styra-ui
+    port: 80
+  selector:
+    app: styra
+
+# ---
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: styra-api
+# spec:
+#   type: NodePort
+#   ports:    
+#   - name: styra-api
+#     port: 8081
+#   selector:
+#     app: styra
